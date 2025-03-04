@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from sklearn.model_selection import train_test_split
 
 data = pd.read_csv('data/creditcard_modify.csv')
 
@@ -12,7 +12,7 @@ data = pd.read_csv('data/creditcard_modify.csv')
 # cols = n[1]
 
 # print(data.head())
-# #print(data.columns)
+# print(data.columns)
 
 # print(data.dtypes)
 
@@ -41,27 +41,43 @@ clean_data = data_numeric.dropna()
 # data['Class'].plot(kind='hist', bins=100, figsize=(14, 6))
 # plt.show()
 
-correlation_matrix = data.corr()
-#print(correlation_matrix)
+# correlation_matrix = data.corr()
+# #print(correlation_matrix)
 
-plt.figure(figsize=(6,4))
-sns.heatmap(data.corr(), annot=True, cmap='coolwarm', fmt=".2f")
-plt.show()
+# plt.figure(figsize=(10,10))
+# sns.heatmap(data.corr(), annot=True, cmap='coolwarm', fmt=".2f")
+# plt.savefig('plots/img.png')
+# plt.show()
 
-v2 = data.iloc[:,2]
-v7 = data.iloc[:,7]
-v29 = data.iloc[:,29]
+# v2 = data.iloc[:,2]
+# v7 = data.iloc[:,7]
+# v29 = data.iloc[:,29]
 
-print(v2.shape)
+# print(v2.shape)
 
-plt.figure(figsize=(8,8))
-plt.scatter(x=v2, y=v7)
-plt.show()
+# plt.figure(figsize=(8,8))
+# plt.scatter(x=v2, y=v7)
+# plt.show()
 
-plt.figure(figsize=(8,8))
-plt.scatter(x=v29, y=v7)
-plt.show()
+# plt.figure(figsize=(8,8))
+# plt.scatter(x=v29, y=v7)
+# plt.show()
 
-plt.figure(figsize=(8,8))
-plt.scatter(x=v2, y=v29)
-plt.show()
+# plt.figure(figsize=(8,8))
+# plt.scatter(x=v2, y=v29)
+# plt.show()
+
+
+x = clean_data.drop('Class', axis=1)
+y = clean_data['Class']
+
+print(x.shape)
+print(y.shape)
+
+
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
+
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
