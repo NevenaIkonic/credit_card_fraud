@@ -1,7 +1,10 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.utils.class_weight import compute_class_weight, compute_sample_weight
 
 data = pd.read_csv('data/creditcard_modify.csv')
 
@@ -71,13 +74,29 @@ clean_data = data_numeric.dropna()
 x = clean_data.drop('Class', axis=1)
 y = clean_data['Class']
 
-print(x.shape)
-print(y.shape)
+# print(x.shape)
+# print(y.shape)
 
 
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
 
-print(X_train.shape)
-print(X_test.shape)
-print(y_train.shape)
-print(y_test.shape)
+# print(X_train.shape)
+# print(X_test.shape)
+# print(y_train.shape)
+# print(y_test.shape)
+
+classifier = LogisticRegression()
+
+cw = compute_class_weight("balanced", classes=np.unique(y_train), y=y_train)
+print(cw)
+sw = compute_sample_weight('balanced', y=y_train)
+classifier.fit(X_train, y_train, sample_weight=sw)
+
+y_pred = classifier.predict(X_test)
+
+print(type(y_pred))
+
+e = np.mean((y_pred - y_test)**2)
+print("e=", e)
+
+print(np.mean(y_test))
