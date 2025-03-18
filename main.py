@@ -5,6 +5,27 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.utils.class_weight import compute_class_weight, compute_sample_weight
+from sklearn.metrics import confusion_matrix
+
+
+def calculate_metrics(conf_mat:np.ndarray) -> list[float]:
+    tp_M = conf_mat[1][1]
+    tn_M = conf_mat[0][0]
+    fn_M = conf_mat[1][0]
+    fp_M = conf_mat[0][1]
+
+    Accuracy = (tp_M + tn_M) / (tp_M + tn_M + fp_M + fn_M)
+    print("Accuracy = ", Accuracy)
+    Precision = tp_M / (tp_M + fp_M)
+    print("Precision = ", Precision)
+    Recall = tp_M / (tp_M + fn_M)
+    print("Recall = ", Recall)
+    F1 = 2 * (Precision * Recall) / (Precision + Recall)
+    print("F1 = ", F1)
+
+    return [Accuracy, Precision, Recall, F1]
+
+
 
 data = pd.read_csv('data/creditcard_modify.csv')
 
@@ -86,17 +107,31 @@ X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random
 # print(y_test.shape)
 
 classifier = LogisticRegression()
+classifier_balanced = LogisticRegression()
 
 cw = compute_class_weight("balanced", classes=np.unique(y_train), y=y_train)
 print(cw)
 sw = compute_sample_weight('balanced', y=y_train)
-classifier.fit(X_train, y_train, sample_weight=sw)
+print("sw=", sw)
+classifier.fit(X_train, y_train)
+classifier_balanced.fit(X_train, y_train, sample_weight=sw)
 
 y_pred = classifier.predict(X_test)
+y_pred_balanced = classifier_balanced.predict(X_test)
 
 print(type(y_pred))
 
 e = np.mean((y_pred - y_test)**2)
 print("e=", e)
 
-print(np.mean(y_test))
+e_balanced = np.mean((y_pred_balanced - y_test)**2)
+print("e_balanced=", e_balanced)
+
+M = confusion_matrix(y_test, y_pred)
+print("M=", M)
+
+M_balanced = confusion_matrix(y_test, y_pred_balanced)
+print("M_balanced=", M_balanced)
+
+calculate_metrics(M)
+calculate_metrics(M_balanced)
