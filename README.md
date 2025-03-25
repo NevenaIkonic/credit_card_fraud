@@ -17,14 +17,14 @@ This project focuses on detecting fraudulent transactions using machine learning
 ## 📂 Project Structure
 ```
 📁 project_root/
-│-- data/                         # Folder containing dataset
-│   ├── creditcard_modify.csv     # Processed transaction dataset
-│-- plots/                        # Folder for saved visualizations
-│-- src/                          # Source code directory
-│   ├── preprocess.py             # Data preprocessing functions
-│   ├── train.py                  # Model training script
-│   ├── evaluate.py               # Model evaluation metrics
-│-- README.md                     # Project documentation
+│-- data/                  # Folder containing dataset
+│-- plots/                 # Folder for saved visualizations
+│-- src/                   # Source code directory
+│   ├── data_loader/       # Module for loading and preprocessing data
+│   ├── metrics/           # Module for calculating evaluation metrics
+│   ├── plot/              # Module for plotting results
+│   ├── train/             # Module for model training
+│-- main.py                # Main script to run the project
 ```
 
 ---
